@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+<script src="js/jquery.hammer.js"></script>
+<script>
+var customers = [];
+
+$(document).ready(function() { // document-ready is the jQuery normalized version of window.onload) 
+	$(".draggable").draggable();
+	$(".droppable").droppable({
+		drop : function(evt, ui) {
+			var dragged = ui.draggable[0];
+			var id = dragged.id;
+			console.log("dropped: " + id);
+			var jqDragged = $("#" + dragged.id);
+			$(jqDragged).parent.remove(jqDragged);
+			$(this).append(jqDragged);
+		}
+	});
+
+	$("#btnGetCustomers").click(function() {
+		$.getJSON("http://www.nextgeneducation.com/weasley/customers.json", function(data) {
+			customers = data;
+			$(document).trigger("CustomersChangedEvent", customers);
+		});
+	});
+
+	$("#btnClearLocalData").click(function() {
+		window.localStorage.clear();
+	});
+	
+	$("#btnClearLocalCustomers").click(function() {
+		window.localStorage.removeItem("customers");
+	});
+
+	//$(document).on("CustomersChangedEvent", function(data) {});
+	
+	$(document).on("CustomersChangedEvent", function(data) {
+		$("#numCustomers").html("# Customers: " + customers.length);
+	});
+
+	$(document).on("CustomersChangedEvent", function(data) {
+		for (var i = 0; i < customers.length; i++) {
+			var cust = customers[i];
+			$("#tblCustomers").append("<tr>" + 
+				"<td>" + cust.customerId + "</td>" +
+				"<td>" + cust.firstName + "</td>" +
+				"<td>" + cust.lastName + "</td>" +
+				"<td>" + cust.phoneNumber + "</td>" +
+				"</tr>"
+			);
+		}
+	});
+
+	$(document).on("CustomersChangedEvent", function(data) {
+		window.localStorage.setItem("customers", JSON.stringify(customers));
+	});
+	
+	
+	$(document).on("CustomersChangedEvent", function(data) {
+		console.log("Customers Changed: " + customers.length + " total customers");
+	});
+
+	if (window.localStorage) {
+		customers = JSON.parse(window.localStorage.getItem("customers"));
+		if (customers && customers.length && customers.length > 0) {
+			$(document).trigger("CustomersChangedEvent", customers);	
+		}
+	}
+
+
+	$(".swipeable").hammer().on("swipe", function(evt) {
+		console.log("Swiped!")	
+	});
+});
+
+/*
+	if (IE) {
+		document.getElementById("div2").attachEvent("onclick", function(ev) {});
+	} else {
+		document.getElementById("div2").addEventListener("click", function(ev) {}, false);
+	}
+*/
+
+
+/*
+var xhr;
+	if (window.XmlHttpRequest) {
+		xhr = new XmlHttpRequest();
+	} else { // MS XML Data Islands
+		xhr = new ActiveX("XMLRequest")
+		if (xhr == null) {
+			xhr = new ActiveX("XMLRequestObject")
+		} if (xhr == null) {
+			xhr = new ActiveX("XMLRequestObject2")
+		}
+	}
+	xhr.open("GET", "http://www.nextgeneducation.com/weasley/customers.json"); // Prep the request, with optional parameters for GET in URL
+	xhr.onreadystatechange = function() {
+		// Process Result
+		// xhr.status is server status (200 "OK", 302 "Redirect", 404 "Not Found", 500 "Server Error", etc)
+		// Ready States 0-4 (xhr.readyState)
+		// 0: Initialized object, but no open/send called
+		// 1: set up (open, onreadystatechange, but send not called)
+		// 2: send called, but no data has yet been received back from server
+		// 3: (many times) a new buffer/block/chunk full of data to process
+		// 4: final chunk and connection has been closed by server
+		// xhr.resultText || xhr.resultXML (returns DOM tree object for XML data)
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			customers = JSON.parse(xhr.resultText);
+		}
+	}
+	xhr.send(null); // Actually initiate the request, optionally with parameters for POST/PUT/DELETE
+	*/
+	
+</script>
+</head>
+<body class="swipeable">
+
+<button id="btnGetCustomers">Get Customers</button>
+<button id="btnClearLocalCustomers">Clear local customers</button>
+<button id="btnClearLocalData">Clear all local data</button>
+
+<div><h1 id="numCustomers"></h1></div>
+<table id="tblCustomers">
+
+</table>
+
+<div id="div1" class="droppable">
+	<h2>Working</h2>
+</div>
+
+<div id="div2" class="droppable">
+	<h2>Broken</h2>
+</div>
+
+<img class="draggable" id="dragFF" src="images/ff.gif" width="69" height="69">
+<img class="draggable" id="dragChrome" src="images/chrome.gif" width="69" height="69">
+<img class="draggable" id="dragIE" src="images/ie.gif" width="69" height="69">
+<img class="draggable" id="dragSafari" src="images/safari.gif" width="69" height="69">
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script>
+
+function bodyAllowDrop(ev) {
+	var data = ev.dataTransfer.getData("browser");
+	console.log("Body Allow Drop: " + data);
+}
+
+function bodyDrop(ev) {
+	var data = ev.dataTransfer.getData("browser");
+	console.log("Body: " + data);
+}
+
+function allowDrop(ev) {
+    if (!(ev.target.nodeName == "body")) {
+        ev.preventDefault();
+    }
+	var types = ev.dataTransfer.types;
+	//console.log();
+	if (types && types[0] == "Files") {
+		console.log("We don't accept files yet...");
+		return false;
+	} else {
+		
+		console.log(ev.dataTransfer.getData("mimeType"));
+	}
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("browser", ev.target.id);
+    ev.dataTransfer.setData("other", new Date());
+    ev.dataTransfer.setData("mimeType", "image/gif");
+    
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("browser");
+    ev.target.appendChild(document.getElementById(data));
+    console.log(ev.dataTransfer.getData("other"));
+}
+</script>
+</head>
+<body  ondrop="drop(event)" ondragover="bodyAllowDrop(event)">
+
+
+	<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+		<h2>Working</h2>
+	</div>
+	
+	<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
+		<h2>Broken</h2>
+	</div>
+	
+	<img id="dragFF" src="images/ff.gif" draggable="true" ondragstart="drag(event)" width="69" height="69">
+	<img id="dragChrome" src="images/Chrome.gif" draggable="true" ondragstart="drag(event)" width="69" height="69">
+	<img id="dragIE" src="images/ie.gif" draggable="true" ondragstart="drag(event)" width="69" height="69">
+	<img id="dragSafari" src="images/safari.gif" draggable="true" ondragstart="drag(event)" width="69" height="69">
+
+	<p>
+	Something...
+	
+	</p>
+</body>
+</html>
