@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+<script src="js/jquery.hammer.js"></script>
+<script src="js/websocket.js"></script>
+</head>
+<body class="swipeable">
+
+<button id="btnGetCustomers">Get Customers</button>
+<button id="btnClearLocalCustomers">Clear local customers</button>
+<button id="btnClearLocalData">Clear all local data</button>
+
+<div><h1 id="numCustomers"></h1></div>
+<table id="tblCustomers">
+
+</table>
+
+<div id="div1" class="droppable">
+	<h2>Working</h2>
+</div>
+
+<div id="div2" class="droppable">
+	<h2>Broken</h2>
+</div>
+
+<img class="draggable" id="dragFF" src="images/ff.gif" width="69" height="69">
+<img class="draggable" id="dragChrome" src="images/chrome.gif" width="69" height="69">
+<img class="draggable" id="dragIE" src="images/ie.gif" width="69" height="69">
+<img class="draggable" id="dragSafari" src="images/safari.gif" width="69" height="69">
+
+</body>
+</html>
