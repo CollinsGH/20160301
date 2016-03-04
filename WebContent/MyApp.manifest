@@ -1,0 +1,17 @@
+# My Weasley Web App
+CACHE MANIFEST
+
+CACHE:
+index.html
+index.js
+index.css
+
+# When network is available
+NETWORK:
+/rest/customers
+
+# When network is unavailable
+FALLBACK:
+/rest/customers customers.json # dummy list of customers
+
+
